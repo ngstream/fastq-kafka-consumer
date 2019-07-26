@@ -4,9 +4,8 @@ import java.io.File
 import java.time.Duration
 import java.util.Properties
 
-import ngstream.fastq.schema.{Fastq, FastqSerde}
+import ngstream.schema.{Fastq, FastqDataSerde, ReadIdSerde}
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.common.serialization.StringDeserializer
 import scopt.{OParser, OParserBuilder}
 
 import scala.collection.JavaConverters.asJavaCollection
@@ -18,8 +17,8 @@ object Main {
 
     val props = new Properties()
     props.put("bootstrap.servers", cmdArgs.brokers.mkString(","))
-    props.put("key.deserializer", classOf[StringDeserializer].getCanonicalName)
-    props.put("value.deserializer", classOf[FastqSerde].getCanonicalName)
+    props.put("key.deserializer", classOf[ReadIdSerde].getCanonicalName)
+    props.put("value.deserializer", classOf[FastqDataSerde].getCanonicalName)
     props.put("group.id", "group2")
 
     val consumer = new KafkaConsumer[String, Fastq](props)
